@@ -40,5 +40,18 @@ def handle_404(e):
     sentry_sdk.capture_message('La ruta solicitada no existe - 404 Error')
     return jsonify(response), 404
 
+
+def handle_500(e):
+    response = {
+    "error": "Internal Server Error",
+    }
+
+    sentry_sdk.capture_message('Internal Server Error 500')
+    return jsonify(response), 500
+
+ 
+
+app.register_error_handler(500, handle_500)
+
 if __name__ == "__main__":
     app.run(debug=True)
