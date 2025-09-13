@@ -6,7 +6,13 @@ from routes.user_name_and_email_search import user_bp
 from routes.user_delete import user_delete
 from routes.user_add import user_add
 from routes.name_search import name_search
-
+import sentry_sdk
+sentry_sdk.init(
+    dsn="https://7a8bbeae55317898c6380efa13aa114b@o4510009648545792.ingest.us.sentry.io/4510009693437952",
+    # Add data like request headers and IP for users, if applicable;
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
 
 app = Flask(__name__)
 CORS(app)
@@ -31,6 +37,7 @@ def handle_404(e):
     "message": "La ruta solicitada no existe",
     "status": 404
     }
+    sentry_sdk.capture_message('La ruta solicitada no existe - 404 Error')
     return jsonify(response), 404
 
 if __name__ == "__main__":
